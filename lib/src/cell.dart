@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'cell_state.dart';
+import 'result.dart';
 
 class Cell extends StatefulWidget {
   int index;
@@ -20,21 +21,24 @@ class _CellState extends State<Cell> {
   @override
   Widget build(BuildContext context) {
     var newState = context.watch<CellState>().state;
-    return Container(margin: const EdgeInsets.all(10), child: ElevatedButton(
-      style: ElevatedButton.styleFrom(
-        backgroundColor: const Color.fromARGB(255, 68, 68, 68),
-        shadowColor: const Color.fromARGB(0, 0, 0, 0)
-      ),
-      onPressed: () {
-        setState(() {
-          state.state = newState;
-          _cells[index] = newState;
-          onCellsUpdate(context);
-        });
-        context.read<CellState>().changeState();
-      },
-      child: getCellIcon()
-    ));
+    return Container(
+        margin: const EdgeInsets.all(10),
+        child: ElevatedButton(
+            style: ElevatedButton.styleFrom(
+                backgroundColor: const Color.fromARGB(255, 68, 68, 68),
+                shadowColor: const Color.fromARGB(0, 0, 0, 0)),
+            onPressed: () {
+              setState(() {
+                if (state.state != null) {
+                  return;
+                }
+                state.state = newState;
+                _cells[index] = newState;
+                onCellsUpdate(context);
+              });
+              context.read<CellState>().changeState();
+            },
+            child: getCellIcon()));
   }
 
   Widget getCellIcon() {
@@ -57,7 +61,8 @@ void onCellsUpdate(BuildContext context) {
       continue;
     }
     if ((_cells[i] == _cells[i + 1]) && (_cells[i + 1] == _cells[i + 2])) {
-      print('horizontal win');
+      Navigator.push(context,
+          MaterialPageRoute(builder: (context) => ResultScreen(_cells[i])));
     }
   }
 
@@ -66,13 +71,16 @@ void onCellsUpdate(BuildContext context) {
       continue;
     }
     if ((_cells[i] == _cells[i + 3]) && (_cells[i + 3] == _cells[i + 6])) {
-      print('vertical win');
+      Navigator.push(context,
+          MaterialPageRoute(builder: (context) => ResultScreen(_cells[i])));
     }
   }
 
   if (_cells[4] != null) {
-    if (((_cells[0] == _cells[4]) && (_cells[4] == _cells[8])) || ((_cells[2] == _cells[4]) && (_cells[4] == _cells[6]))) {
-      print('diagonal win');
+    if (((_cells[0] == _cells[4]) && (_cells[4] == _cells[8])) ||
+        ((_cells[2] == _cells[4]) && (_cells[4] == _cells[6]))) {
+      Navigator.push(context,
+          MaterialPageRoute(builder: (context) => ResultScreen(_cells[4])));
     }
   }
 
@@ -81,5 +89,10 @@ void onCellsUpdate(BuildContext context) {
       return;
     }
   }
-  print('lose: no free cells');
+  Navigator.push(context,
+      MaterialPageRoute(builder: (context) => const ResultScreen(null)));
+}
+
+void newGame() {
+  _cells = List.generate(9, (index) => null);
 }

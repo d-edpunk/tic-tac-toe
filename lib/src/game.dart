@@ -16,16 +16,14 @@ class _GameState extends State<Game> {
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider<CellState>(
-      create: (context) => current,
-      child: Scaffold(
-      backgroundColor: const Color.fromARGB(255, 34, 34, 34),
-      appBar: AppBar(
-        backgroundColor: const Color.fromARGB(255, 68, 68, 68),
-      ),
-      body: GridView.count(
-        crossAxisCount: 3,
-        children: List.generate(9, (index) => Cell(index))
-      ))
-    );
+        create: (context) => current,
+        child: Scaffold(
+            backgroundColor: const Color.fromARGB(255, 34, 34, 34),
+            appBar: AppBar(
+              backgroundColor: const Color.fromARGB(255, 68, 68, 68),
+            ),
+            body: GridView.count(
+                crossAxisCount: 3,
+                children: List.generate(9, (index) => Cell(index)))));
   }
 }

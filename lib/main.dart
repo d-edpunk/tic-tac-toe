@@ -1,4 +1,4 @@
 import 'package:flutter/material.dart';
-import 'src/game.dart';
+import 'src/home.dart';
 
-void main() => runApp(MaterialApp(home: Game()));
+void main() => runApp(const MaterialApp(home: Home()));
